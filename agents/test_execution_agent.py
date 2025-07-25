@@ -6,7 +6,7 @@ class TestExecutor:
     def __init__(self):
         self.client = docker.from_env()
 
-    @tool
+    @tool(return_direct=True)
     def execute_docker_test(self, image_name: str, test_script_content: str, container_port: int = None, host_port: int = None) -> dict:
         """
         Runs a test script within a specified Docker container image.
@@ -56,8 +56,8 @@ class TestExecutor:
                 demux=True # Get stdout and stderr separately [176]
             )
             
-            stdout = exec_result.output.decode('utf-8') if exec_result.output else ""
-            stderr = exec_result.output.[1]decode('utf-8') if exec_result.output[1] else ""
+            stdout = exec_result.output[0].decode('utf-8') if exec_result.output[0] else ""
+            stderr = exec_result.output[1].decode('utf-8') if exec_result.output[1] else ""
             exit_code = exec_result.exit_code
 
             print(f"Test execution completed for {cve_id}. Stopping container...")
